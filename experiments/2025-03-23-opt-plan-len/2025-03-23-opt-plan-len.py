@@ -39,7 +39,7 @@ BUILD_OPTIONS = []
 DRIVER_OPTIONS = ["--transform-task", "preprocess-h2", "--alias", "scorpion"]
 # Pairs of revision identifier and optional revision nick.
 REV_NICKS = [
-    ("main", ""),
+    ("scorpion", ""),
 ]
 ATTRIBUTES = [
     "error",
