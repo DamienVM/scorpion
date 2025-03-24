@@ -1,6 +1,8 @@
 #! /usr/bin/env python
-
+import json
 import os
+
+from downward.suites import Task
 
 import custom_parser
 import project
@@ -12,6 +14,8 @@ from lab.experiment import Experiment
 
 REPO = project.get_repo_base()
 BENCHMARKS_DIR = REPO.parent / "downward-benchmarks"
+with open(BENCHMARKS_DIR / 'opt_plan_data.json', 'r') as file:
+    opt_data = json.load(file)
 SCP_LOGIN = "myname@myserver.com"
 REMOTE_REPOS_DIR = "/infai/username/projects"
 SUITE = ["depot:p01.pddl", "grid:prob01.pddl", "gripper:prob01.pddl"]
@@ -24,7 +28,7 @@ REVISION_CACHE = (
 if project.REMOTE:
     # ENV = project.BaselSlurmEnvironment(email="my.name@myhost.ch")
     ENV = project.TetralithEnvironment(
-        memory_per_cpu="9G",  # leave some space for the scripts
+        memory_per_cpu="33G",  # leave some space for the scripts
         email="damien.van.meerbeeck@liu.se",
         extra_options="#SBATCH --account=naiss2024-5-421",
     )
@@ -36,7 +40,11 @@ CONFIGS = [
     ("SC opt", []),
 ]
 BUILD_OPTIONS = []
-DRIVER_OPTIONS = ["--transform-task", "preprocess-h2", "--alias", "scorpion"]
+DRIVER_OPTIONS = [
+    "--overall-memory-limit", "32G",
+    "--overall-time-limit", "5h",
+    "--transform-task", "preprocess-h2",
+    "--alias", "scorpion"]
 # Pairs of revision identifier and optional revision nick.
 REV_NICKS = [
     ("scorpion", ""),
@@ -61,8 +69,11 @@ for rev, rev_nick in REV_NICKS:
     exp.add_resource("", cached_rev.path, cached_rev.get_relative_exp_path())
     for config_nick, config in CONFIGS:
         algo_name = f"{rev_nick}-{config_nick}" if rev_nick else config_nick
-
+        task: Task
         for task in suites.build_suite(BENCHMARKS_DIR, SUITE):
+            if task.domain in opt_data:
+                if task.problem in opt_data[task.domain]:
+                    continue
             algo = FastDownwardAlgorithm(
                 algo_name,
                 cached_rev,
