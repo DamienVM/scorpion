@@ -71,6 +71,8 @@ for rev, rev_nick in REV_NICKS:
         algo_name = f"{rev_nick}-{config_nick}" if rev_nick else config_nick
         task: Task
         for task in suites.build_suite(BENCHMARKS_DIR, SUITE):
+            if "quantum-layout-opt23-strips" not in task.domain:
+                continue
             if task.domain in opt_data:
                 if task.problem in opt_data[task.domain]:
                     continue

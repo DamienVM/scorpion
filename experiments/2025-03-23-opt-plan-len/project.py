@@ -103,7 +103,7 @@ SUITE_OPTIMAL_STRIPS = [
     "parcprinter-opt11-strips", "parking-opt11-strips", "parking-opt14-strips",
     "pathways", "pegsol-08-strips", "pegsol-opt11-strips",
     "petri-net-alignment-opt18-strips", "pipesworld-notankage", "pipesworld-tankage",
-    "psr-small", "rovers", "satellite", "scanalyzer-08-strips",
+    "psr-small", "quantum-layout-opt23-strips", "rovers", "satellite", "scanalyzer-08-strips",
     "scanalyzer-opt11-strips", "snake-opt18-strips", "sokoban-opt08-strips",
     "sokoban-opt11-strips", "spider-opt18-strips", "storage", "termes-opt18-strips",
     "tetris-opt14-strips", "tidybot-opt11-strips", "tidybot-opt14-strips", "tpp",
